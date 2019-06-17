@@ -11,27 +11,48 @@ services:
   ui:
     #build: ./ui
     #container_name: my-ui-container
-    image: ${USER_NAME}/ui #:${UI_SERVICE_VERSION}
+    image: ${USER_NAME}/ui:logging #:${UI_SERVICE_VERSION}
+    environment:
+      - POST_SERVICE_HOST=post
+      - POST_SERVICE_PORT=5000
+      - COMMENT_SERVICE_HOST=comment
+      - COMMENT_SERVICE_PORT=9292
+      - ZIPKIN_ENABLED=${ZIPKIN_ENABLED}
     ports:
       - ${UI}:9292/tcp
     networks:
       - front_net
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: service.ui
 
   post:
     #build: ./post-py
     #container_name: my-post-container
-    image: ${USER_NAME}/post #:${POST_SERVICE_VERSION}
+    image: ${USER_NAME}/post:logging #:${POST_SERVICE_VERSION}
+    environment:
+      - ZIPKIN_ENABLED=${ZIPKIN_ENABLED}
     networks:
       - back_net
       - front_net
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: service.post
 
   comment:
     #build: ./comment
     #container_name: my-comment-container
-    image: ${USER_NAME}/comment #:${COMMENT_SERVICE_VERSION}
+    image: ${USER_NAME}/comment:logging #:${COMMENT_SERVICE_VERSION}
+    environment:
+      - ZIPKIN_ENABLED=${ZIPKIN_ENABLED}
     networks:
       - back_net
       - front_net
+
 
 volumes:
   post_db:

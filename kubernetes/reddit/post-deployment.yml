@@ -23,5 +23,5 @@ spec:
       - image: yashkin/post
         name: post
         env:
-        - name: COMMENT_DATABASE_HOST
-          value: comment-db
+        - name: POST_DATABASE_HOST
+          value: post-db

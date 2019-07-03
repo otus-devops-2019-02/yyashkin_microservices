@@ -1,0 +1,20 @@
+comment:
+  image:
+    repository: yashkin/comment
+    tag: latest
+  service:
+    externalPort: 9292
+
+post:
+  image:
+    repository: yashkin/post
+    tag: latest
+    service:
+      externalPort: 5000
+
+ui:
+  image:
+    repository: yashkin/ui
+    tag: latest
+    service:
+      externalPort: 9292
